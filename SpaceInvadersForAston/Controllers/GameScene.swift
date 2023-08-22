@@ -26,14 +26,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     var heartsArray:[SKSpriteNode] = []
     var lifeScore:Int = 0
-    
-//    let enemyCategory: UInt32 = 1
-//    let bulletCategory: UInt32 = 2
-//    let spaceShipCategory: UInt32 = 3
        
     //MARK: - Lifecycle
     override func didMove(to view: SKView) {
         setUserInterface()
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        collisionControll(contact: contact)
     }
     
     override func update(_ currentTime: TimeInterval) {
@@ -48,25 +48,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //MARK: - Set functions
     func setUserInterface(){
-        
         playBackgroundSong()
-        
         setStarfield()
         setSpaceShip()
-        
         lifeScore = 5
         setHearts(count: lifeScore)
-        
         setScoreTable()
-        
         setTimer()
         setSpeedAttack(speedAttack: 3)
-        
     }
     
     func setHearts(count lifeScore: Int){
-        
-        
         var indentX:CGFloat = 100
         for _ in 1...lifeScore{
             let  heart = SKSpriteNode(imageNamed: "heart_set")
@@ -88,7 +80,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         scoreTable.position = CGPoint(x: self.frame.midX, y: self.frame.size.height/2 - 200)
         scoreTable.zPosition = 1
         self.addChild(scoreTable)
-        
     }
     
     func setSpaceShip(){
@@ -105,11 +96,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         spaceShip.physicsBody?.categoryBitMask = ObjcCategories.spaceShipCategory
         spaceShip.physicsBody?.contactTestBitMask = ObjcCategories.enemyCategory
         spaceShip.physicsBody?.collisionBitMask = 0
-
     }
     
     func setStarfield(){
-        
         let background = SKSpriteNode(imageNamed: "space_bg")
         background.zPosition = -2
         self.addChild(background)
@@ -119,9 +108,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         starfield.zPosition = -1
         starfield.advanceSimulationTime(2)
         self.addChild(starfield)
+    }
+    
+    func setGameOverView(){
         
+        let gameOverView = UIView()
+        gameOverView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let gameOverLabel = UILabel()
+        gameOverLabel.text = "Game over"
+        gameOverLabel.font = UIConstraintsConstants.gameOverFontUIFont
+        gameOverLabel.textColor = .red
+        gameOverLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        gameOverView.addSubview(gameOverLabel)
+        
+        NSLayoutConstraint.activate([
+            gameOverView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
+            gameOverView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
+        ])
+        
+        
+        let buttonBackToMainMenu = UIButton()
+        buttonBackToMainMenu.setTitle("Main menu", for: .normal)
         
     }
+    
     
     //MARK: - Timers
     
@@ -198,7 +210,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         return CGFloat(randomPos.nextInt())
     }
     
-    func didBegin(_ contact: SKPhysicsContact) {
+    
+    
+    //MARK: - Collision functions
+    
+    func collisionControll(contact: SKPhysicsContact){
         let twoObjcSet: Set<UInt32> = [contact.bodyA.categoryBitMask , contact.bodyB.categoryBitMask]
         
         switch twoObjcSet{
@@ -285,35 +301,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func endGame(){
-        
-        let endgameLabel = SKLabelNode(text: "Game over!")
-        endgameLabel.fontName = "AmericanTypewriter-Bold"
-        endgameLabel.fontSize = 80
-        endgameLabel.fontColor = .red
-        endgameLabel.position = CGPoint(x: self.frame.midX, y: self.frame.midY)
-        endgameLabel.zPosition = 2
-        self.addChild(endgameLabel)
-        
         speedAttackTimer.invalidate()
+        let gameOverView = GameOverView.instatceFromNib()
         
     }
-    
-    
-    
-//    func setBackground(){
-//
-//        let background = SKSpriteNode(texture: SKTexture(image: UIImage(named: "space_bg")!))
-//        background.position = CGPoint(x: size.width/2, y: size.height/2)
-//        background.anchorPoint = CGPoint.zero
-//        background.zPosition = -1
-//        self.addChild(background)
-//
-//
-//        let moveBackground = SKAction.moveBy(x: 0, y: -1000, duration: 10)
-//        let resetBackground = SKAction.moveBy(x: 0, y: 1000, duration: 0)
-//        let moveBackgroundSequence = SKAction.sequence([moveBackground, resetBackground])
-//        let moveBackgroundForever = SKAction.repeatForever(moveBackgroundSequence)
-//        background.run(moveBackgroundForever)
-//
-//    }
 }

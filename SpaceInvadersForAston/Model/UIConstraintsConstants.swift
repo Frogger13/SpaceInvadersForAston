@@ -12,4 +12,5 @@ enum UIConstraintsConstants{
     static let mainMenuButtonLeadingConstraint:CGFloat = 120
     static let mainMenuButtonIndent:CGFloat = 50
     static let mainMenuButtonFont:UIFont = UIFont.boldSystemFont(ofSize: 24)
+    static let gameOverFontUIFont = UIFont.boldSystemFont(ofSize: 36)
 }
