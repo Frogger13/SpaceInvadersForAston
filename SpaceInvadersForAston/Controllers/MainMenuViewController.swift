@@ -32,7 +32,7 @@ class MainMenuViewController: UIViewController {
         //MARK: - buttonStartGame setup
         view.addSubview(buttonStartGame)
         buttonStartGame.setTitle("Start game", for: .normal)
-        buttonStartGame.titleLabel?.font = UIConstraintsConstants.mainMenuButtonFont
+        buttonStartGame.titleLabel?.font = UIConstants.mainButtonFont
         buttonStartGame.setTitleColor(.yellow, for: .normal)
         buttonStartGame.setTitleColor(.blue, for: .focused)
         
@@ -45,7 +45,7 @@ class MainMenuViewController: UIViewController {
         //MARK: - buttonRecords setup
         view.addSubview(buttonRecords)
         buttonRecords.setTitle("Records", for: .normal)
-        buttonRecords.titleLabel?.font = UIConstraintsConstants.mainMenuButtonFont
+        buttonRecords.titleLabel?.font = UIConstants.mainButtonFont
         buttonRecords.setTitleColor(.yellow, for: .normal)
         buttonRecords.setTitleColor(.blue, for: .focused)
         
@@ -57,7 +57,7 @@ class MainMenuViewController: UIViewController {
         //MARK: - buttonSettingsSetup
         view.addSubview(buttonSettings)
         buttonSettings.setTitle("Settings", for: .normal)
-        buttonSettings.titleLabel?.font = UIConstraintsConstants.mainMenuButtonFont
+        buttonSettings.titleLabel?.font = UIConstants.mainButtonFont
         buttonSettings.setTitleColor(.yellow, for: .normal)
         buttonSettings.setTitleColor(.blue, for: .focused)
         
@@ -70,40 +70,39 @@ class MainMenuViewController: UIViewController {
         NSLayoutConstraint.activate([
             buttonRecords.centerXAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerXAnchor),
             buttonRecords.centerYAnchor.constraint(equalTo: view.safeAreaLayoutGuide.centerYAnchor),
-            buttonRecords.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstraintsConstants.mainMenuButtonLeadingConstraint),
-            buttonRecords.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -UIConstraintsConstants.mainMenuButtonLeadingConstraint),
+            buttonRecords.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: UIConstants.mainMenuButtonLeadingTrailingConstraint),
+            buttonRecords.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -UIConstants.mainMenuButtonLeadingTrailingConstraint),
             
-            buttonStartGame.bottomAnchor.constraint(equalTo: buttonRecords.topAnchor, constant: -UIConstraintsConstants.mainMenuButtonIndent),
+            buttonStartGame.bottomAnchor.constraint(equalTo: buttonRecords.topAnchor, constant: -UIConstants.mainMenuButtonIndent),
             buttonStartGame.leadingAnchor.constraint(equalTo: buttonRecords.leadingAnchor),
             buttonStartGame.trailingAnchor.constraint(equalTo: buttonRecords.trailingAnchor),
             
-            buttonSettings.topAnchor.constraint(equalTo: buttonRecords.bottomAnchor, constant: UIConstraintsConstants.mainMenuButtonIndent),
+            buttonSettings.topAnchor.constraint(equalTo: buttonRecords.bottomAnchor, constant: UIConstants.mainMenuButtonIndent),
             buttonSettings.leadingAnchor.constraint(equalTo: buttonRecords.leadingAnchor),
             buttonSettings.trailingAnchor.constraint(equalTo: buttonRecords.trailingAnchor),
         ])
-        
-        
-        
-        
-        
-        
     }
     
     //MARK: - Navidgation
     
+    func openView(identifier: String){
+        if let controller = storyboard?.instantiateViewController(withIdentifier: identifier){
+            controller.modalPresentationStyle = .fullScreen
+            self.present(controller, animated: true)
+        } else {return}
+    }
+    
     @objc func pressedButtonStartGame(){
-        
-        guard let controller = storyboard?.instantiateViewController(withIdentifier: "GameViewController") as? GameViewController else {return}
-        controller.modalPresentationStyle = .fullScreen
-        self.present(controller, animated: true)
+        openView(identifier: "GameViewController")
     }
     
     @objc func pressedButtonRecords(){
-        
+        openView(identifier: "RecordsViewController")
     }
     
     @objc func pressedButtonSettings(){
-        
+        openView(identifier: "SettingsViewController")
     }
 
 }
+

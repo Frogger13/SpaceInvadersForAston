@@ -8,7 +8,11 @@
 import Foundation
 
 enum GameplayConstants{
-    static var animDurationEnemy:TimeInterval = 5
-    static var animTimeIntervalEnemy:TimeInterval = 1.5
-    static var animDurationBullet:TimeInterval = 0.5
+    static let spaceShipNamesArray: Array<(String, String)> = [
+    ("Classic", "space_ship"),
+    ("Bee", "bee_space_ship"),
+    ("Cartoon", "cartoon_space_ship"),
+    ("Villian", "villian_space_ship"),
+    ("White", "white_space_ship")
+    ]
 }

@@ -9,9 +9,22 @@ import Foundation
 import UIKit
 
 enum UIConstants{
-    static let mainMenuButtonLeadingConstraint:CGFloat = 120
+    static let mainMenuButtonLeadingTrailingConstraint:CGFloat = 120
     static let mainMenuButtonIndent:CGFloat = 50
-    static let mainMenuButtonFont:UIFont = UIFont.boldSystemFont(ofSize: 24)
+    static let gameOverViewIndent:CGFloat = 20
+    static let recordsViewIndent:CGFloat = 20
+    
+    
     //MARK: - Fonts
-    static let gameOverFontUIFont = UIFont.boldSystemFont(ofSize: 56)
+    static let mainButtonFont = UIFont.boldSystemFont(ofSize: 24)
+    static let gameOverTitleFont = UIFont.boldSystemFont(ofSize: 56)
+    static let titleFont = UIFont.boldSystemFont(ofSize: 42)
+    
+    //MARK: - SettingsView
+    static let settigsViewTitleFont = UIFont.boldSystemFont(ofSize: 42)
+    static let settingsViewTextFont = UIFont.boldSystemFont(ofSize: 24)
+    static let settingsViewElementIndent:CGFloat = 40
+    static let settingsViewSafeAreaIndent:CGFloat = 20
+    static let settingsViewLeftRightIndent:CGFloat = 60
+    
 }

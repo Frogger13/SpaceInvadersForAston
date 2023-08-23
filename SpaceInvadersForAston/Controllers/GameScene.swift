@@ -7,10 +7,12 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 class GameScene: SKScene, SKPhysicsContactDelegate{
     
     //MARK: - var/let
+    let defaults = UserDefaults.standard
     var starfield: SKEmitterNode!
     var spaceShip: SKSpriteNode!
     var scoreTable = SKLabelNode(text: "Счет: 0")
@@ -26,6 +28,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     var heartsArray:[SKSpriteNode] = []
     var lifeScore:Int = 0
+    
+    let player = SKSpriteNode()
+    
+    var audioPlayer = AVAudioPlayer()
+        
+    weak var gameViewControlerDelegate: GameViewControllerDelegate?
        
     //MARK: - Lifecycle
     override func didMove(to view: SKView) {
@@ -46,29 +54,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }
     }
     
+    
     //MARK: - Set functions
     func setUserInterface(){
         playBackgroundSong()
         setStarfield()
         setSpaceShip()
-        lifeScore = 5
-        setHearts(count: lifeScore)
+        setHearts()
         setScoreTable()
-        setTimer()
-        setSpeedAttack(speedAttack: 3)
+        setEnemyTimerAppearence()
+        setSpeedAttack()
     }
     
-    func setHearts(count lifeScore: Int){
+    func setHearts(){
         var indentX:CGFloat = 100
-        for _ in 1...lifeScore{
-            let  heart = SKSpriteNode(imageNamed: "heart_set")
-            heart.position = CGPoint(x: -self.frame.size.width/2 + indentX, y: self.frame.size.height/2 - 100)
-            heart.size = CGSize(width: 30, height: 30)
-            heart.zPosition = 1
-            indentX += heart.size.width + 20
-            heartsArray.append(heart)
+        lifeScore = defaults.integer(forKey: UserDefaultsKeys.lifeScore)
+        if lifeScore > 0 {
+            for _ in 1...lifeScore{
+                let  heart = SKSpriteNode(imageNamed: "heart_set")
+                heart.position = CGPoint(x: -self.frame.size.width/2 + indentX, y: self.frame.size.height/2 - 100)
+                heart.size = CGSize(width: 30, height: 30)
+                heart.zPosition = 1
+                indentX += heart.size.width + 20
+                heartsArray.append(heart)
+            }
+            heartsArray.forEach({self.addChild($0)})
+        } else {
+            return
         }
-        heartsArray.forEach({self.addChild($0)})
     }
     
     func setScoreTable(){
@@ -83,9 +96,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func setSpaceShip(){
-        spaceShip = SKSpriteNode(imageNamed: "space_ship")
+        if let spaceShipName = defaults.string(forKey: UserDefaultsKeys.spaceShipName){
+            spaceShip = SKSpriteNode(imageNamed: spaceShipName)
+        } else {
+            spaceShip = SKSpriteNode(imageNamed: "space_ship")
+        }
         spaceShip.position = CGPoint(x: self.frame.midX, y: self.frame.minY + 100)
-        spaceShip.setScale(0.7)
+        spaceShip.size = CGSize(width: 100, height: 150)
         self.addChild(spaceShip)
         
         self.physicsWorld.gravity = CGVector(dx: 0, dy: 0)
@@ -93,8 +110,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         spaceShip.physicsBody = SKPhysicsBody(rectangleOf: spaceShip.size)
         spaceShip.physicsBody?.isDynamic = true
-        spaceShip.physicsBody?.categoryBitMask = ObjcCategories.spaceShipCategory
-        spaceShip.physicsBody?.contactTestBitMask = ObjcCategories.enemyCategory
+        spaceShip.physicsBody?.categoryBitMask = ObjcKeys.spaceShipCategory
+        spaceShip.physicsBody?.contactTestBitMask = ObjcKeys.enemyCategory
         spaceShip.physicsBody?.collisionBitMask = 0
     }
     
@@ -110,39 +127,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         self.addChild(starfield)
     }
     
-    func setGameOverView(){
-        
-        let gameOverView = UIView()
-        gameOverView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let gameOverLabel = UILabel()
-        gameOverLabel.text = "Game over"
-        gameOverLabel.font = UIConstraintsConstants.gameOverFontUIFont
-        gameOverLabel.textColor = .red
-        gameOverLabel.translatesAutoresizingMaskIntoConstraints = false
-        
-        gameOverView.addSubview(gameOverLabel)
-        
-        NSLayoutConstraint.activate([
-            gameOverView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor),
-            gameOverView.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor),
-        ])
-        
-        
-        let buttonBackToMainMenu = UIButton()
-        buttonBackToMainMenu.setTitle("Main menu", for: .normal)
-        
-    }
-    
     
     //MARK: - Timers
     
-    func setTimer(){
-        scoreTimer = Timer.scheduledTimer(timeInterval: GameplayConstants.animTimeIntervalEnemy, target: self, selector: #selector(addEnemy), userInfo: nil, repeats: true)
+    func setEnemyTimerAppearence(){
+        if let animTimeIntervalEnemy = defaults.object(forKey: UserDefaultsKeys.timeAppearenceInterval) as? Double {
+            scoreTimer = Timer.scheduledTimer(timeInterval: animTimeIntervalEnemy, target: self, selector: #selector(addEnemy), userInfo: nil, repeats: true)
+        } else {
+            scoreTimer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(addEnemy), userInfo: nil, repeats: true)
+        }
     }
     
-    func setSpeedAttack(speedAttack:TimeInterval){
-        speedAttackTimer = Timer.scheduledTimer(timeInterval: speedAttack, target: self, selector: #selector(openFire), userInfo: nil, repeats: true)
+    func setSpeedAttack(){
+        if let speedAttack = defaults.object(forKey: UserDefaultsKeys.speedAttack) as? Double {
+            speedAttackTimer = Timer.scheduledTimer(timeInterval: speedAttack, target: self, selector: #selector(openFire), userInfo: nil, repeats: true)
+        } else {
+            speedAttackTimer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(openFire), userInfo: nil, repeats: true)
+        }
     }
     
     
@@ -160,14 +161,19 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         enemy.physicsBody = SKPhysicsBody(rectangleOf: enemy.size)
         enemy.physicsBody?.isDynamic = true
         
-        enemy.physicsBody?.categoryBitMask = ObjcCategories.enemyCategory
-        enemy.physicsBody?.contactTestBitMask = ObjcCategories.bulletCategory
+        enemy.physicsBody?.categoryBitMask = ObjcKeys.enemyCategory
+        enemy.physicsBody?.contactTestBitMask = ObjcKeys.bulletCategory
         enemy.physicsBody?.collisionBitMask = 0
         
         self.addChild(enemy)
         
         var actions = [SKAction]()
-        actions.append(SKAction.move(to: CGPoint(x: pos, y: -self.size.height/2), duration: GameplayConstants.animDurationEnemy))
+        
+        if let gameSpeed = defaults.object(forKey: UserDefaultsKeys.gameSpeed) as? Double {
+            actions.append(SKAction.move(to: CGPoint(x: pos, y: -self.size.height/2), duration: gameSpeed))
+        } else {
+            actions.append(SKAction.move(to: CGPoint(x: pos, y: -self.size.height/2), duration: 10))
+        }
         actions.append(SKAction.removeFromParent())
         enemy.run(SKAction.sequence(actions))
         
@@ -185,15 +191,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         
         bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width/2)
         bullet.physicsBody?.isDynamic = true
-        bullet.physicsBody?.categoryBitMask = ObjcCategories.bulletCategory
-        bullet.physicsBody?.contactTestBitMask = ObjcCategories.enemyCategory
+        bullet.physicsBody?.categoryBitMask = ObjcKeys.bulletCategory
+        bullet.physicsBody?.contactTestBitMask = ObjcKeys.enemyCategory
         bullet.physicsBody?.collisionBitMask = 0
         bullet.physicsBody?.usesPreciseCollisionDetection = true
         
         self.addChild(bullet)
         
         var actions = [SKAction]()
-        actions.append(SKAction.move(to: CGPoint(x: spaceShip.position.x, y: self.size.height/2), duration: GameplayConstants.animDurationBullet))
+        actions.append(SKAction.move(to: CGPoint(x: spaceShip.position.x, y: self.size.height/2), duration: 0.5))
         actions.append(SKAction.removeFromParent())
         bullet.run(SKAction.sequence(actions))
     }
@@ -201,8 +207,24 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     //MARK: - Functions
     
     func playBackgroundSong(){
-        guard let playSong = SKAction.playSoundFileNamed("background_soundtrack", waitForCompletion: true) as SKAction? else {return}
-        self.run(SKAction.repeatForever(playSong))
+        let url = URL(fileURLWithPath: Bundle.main.path(forResource: "background_soundtrack.mp3", ofType: nil)!)
+        if let volumeSong = defaults.object(forKey: UserDefaultsKeys.volumeSong) as? Float {
+            do{
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer.setVolume(volumeSong, fadeDuration: 0)
+                audioPlayer.play()
+            } catch {
+                print("File download error")
+            }
+        } else {
+            do{
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer.setVolume(0.5, fadeDuration: 0)
+                audioPlayer.play()
+            } catch {
+                print("File download error")
+            }
+        }
     }
     
     func randomisePos() -> CGFloat{
@@ -218,11 +240,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         let twoObjcSet: Set<UInt32> = [contact.bodyA.categoryBitMask , contact.bodyB.categoryBitMask]
         
         switch twoObjcSet{
-        case [ObjcCategories.enemyCategory, ObjcCategories.bulletCategory]:
+        case [ObjcKeys.enemyCategory, ObjcKeys.bulletCategory]:
             do{
                 collisionEnemyAndBullet(bodyANode: contact.bodyA.node as! SKSpriteNode, bodyBNode: contact.bodyB.node as! SKSpriteNode)
             }
-        case [ObjcCategories.spaceShipCategory, ObjcCategories.enemyCategory]:
+        case [ObjcKeys.spaceShipCategory, ObjcKeys.enemyCategory]:
             do{
                 collisionEnemyAndSpaceship(bodyANode: contact.bodyA.node as! SKSpriteNode, bodyBNode: contact.bodyB.node as! SKSpriteNode)
             }
@@ -236,7 +258,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         var enemyBody: SKSpriteNode
         var bulletBody: SKSpriteNode
         
-        if bodyANode.physicsBody?.categoryBitMask == ObjcCategories.enemyCategory {
+        if bodyANode.physicsBody?.categoryBitMask == ObjcKeys.enemyCategory {
             enemyBody = bodyANode
             bulletBody = bodyBNode
         } else {
@@ -266,7 +288,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         var spaceshipBody: SKSpriteNode
         var enemyBody: SKSpriteNode
         
-        if bodyANode.physicsBody?.categoryBitMask == ObjcCategories.spaceShipCategory {
+        if bodyANode.physicsBody?.categoryBitMask == ObjcKeys.spaceShipCategory {
             spaceshipBody = bodyANode
             enemyBody = bodyBNode
         } else {
@@ -300,9 +322,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }
     }
     
+    func saveNewRecord(){
+        let defaults = UserDefaults.standard
+        if var recordsArray = defaults.array(forKey: ObjcKeys.recordsArray) as? Array<Int>{
+            recordsArray.append(score)
+            recordsArray.sort(by: > )
+            recordsArray.removeLast()
+            defaults.set(recordsArray, forKey: ObjcKeys.recordsArray)
+        } else {
+            defaults.set(Array<Int>(repeating: 0, count: 10), forKey: ObjcKeys.recordsArray)
+        }
+    }
+    
     func endGame(){
+        audioPlayer.stop()
+        saveNewRecord()
         speedAttackTimer.invalidate()
-        let gameOverView = GameOverView.instatceFromNib()
+        gameViewControlerDelegate?.openGameOverView()
         
     }
 }

@@ -8,10 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		9995948136D0BE2FF7F6424A /* Pods_SpaceInvadersForAston.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 46066982FCCC66F8C59613A3 /* Pods_SpaceInvadersForAston.framework */; };
-		B722C1012A94A51C004EE9C7 /* ObjcCategories.swift in Sources */ = {isa = PBXBuildFile; fileRef = B722C1002A94A51C004EE9C7 /* ObjcCategories.swift */; };
-		B722C1032A94B5B4004EE9C7 /* UIConstraintsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B722C1022A94B5B4004EE9C7 /* UIConstraintsConstants.swift */; };
-		B722C1092A94CB52004EE9C7 /* GameOverView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B722C1082A94CB52004EE9C7 /* GameOverView.xib */; };
+		B722C1012A94A51C004EE9C7 /* ObjcKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B722C1002A94A51C004EE9C7 /* ObjcKeys.swift */; };
+		B722C1032A94B5B4004EE9C7 /* UIConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = B722C1022A94B5B4004EE9C7 /* UIConstants.swift */; };
 		B722C10B2A94CB61004EE9C7 /* GameOverView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B722C10A2A94CB61004EE9C7 /* GameOverView.swift */; };
+		B722C10D2A94DF45004EE9C7 /* GameViewControllerDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B722C10C2A94DF45004EE9C7 /* GameViewControllerDelegate.swift */; };
 		B75DF9AA2A77C7120016FBCD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75DF9A92A77C7120016FBCD /* AppDelegate.swift */; };
 		B75DF9AC2A77C7120016FBCD /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = B75DF9AB2A77C7120016FBCD /* GameScene.sks */; };
 		B75DF9B02A77C7120016FBCD /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = B75DF9AF2A77C7120016FBCD /* GameScene.swift */; };
@@ -26,15 +26,21 @@
 		B75DF9CE2A791B6D0016FBCD /* background_soundtrack.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B75DF9CD2A791B6D0016FBCD /* background_soundtrack.mp3 */; };
 		B75DF9D02A792CD10016FBCD /* openFire_sound.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = B75DF9CF2A792CD10016FBCD /* openFire_sound.mp3 */; };
 		B7A7107B2A7A68E300D6D3DC /* MainMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7A7107A2A7A68E300D6D3DC /* MainMenuViewController.swift */; };
+		B7B622E02A950DB90036E44B /* RecordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B622DF2A950DB90036E44B /* RecordsViewController.swift */; };
+		B7B622E22A950FDC0036E44B /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B622E12A950FDC0036E44B /* SettingsViewController.swift */; };
+		B7B622E72A9610940036E44B /* RecordViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = B7B622E62A9610940036E44B /* RecordViewCell.xib */; };
+		B7B622E92A9626120036E44B /* RecordModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B622E82A9626120036E44B /* RecordModel.swift */; };
+		B7B622EB2A9643220036E44B /* SpaceshipNames.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B622EA2A9643220036E44B /* SpaceshipNames.swift */; };
+		B7B622ED2A9682840036E44B /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B622EC2A9682840036E44B /* UserDefaultsKeys.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		46066982FCCC66F8C59613A3 /* Pods_SpaceInvadersForAston.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SpaceInvadersForAston.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6CCD0412AE81D0376BA5C3BD /* Pods-SpaceInvadersForAston.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceInvadersForAston.release.xcconfig"; path = "Target Support Files/Pods-SpaceInvadersForAston/Pods-SpaceInvadersForAston.release.xcconfig"; sourceTree = "<group>"; };
-		B722C1002A94A51C004EE9C7 /* ObjcCategories.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjcCategories.swift; sourceTree = "<group>"; };
-		B722C1022A94B5B4004EE9C7 /* UIConstraintsConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstraintsConstants.swift; sourceTree = "<group>"; };
-		B722C1082A94CB52004EE9C7 /* GameOverView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = GameOverView.xib; sourceTree = "<group>"; };
+		B722C1002A94A51C004EE9C7 /* ObjcKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObjcKeys.swift; sourceTree = "<group>"; };
+		B722C1022A94B5B4004EE9C7 /* UIConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIConstants.swift; sourceTree = "<group>"; };
 		B722C10A2A94CB61004EE9C7 /* GameOverView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverView.swift; sourceTree = "<group>"; };
+		B722C10C2A94DF45004EE9C7 /* GameViewControllerDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewControllerDelegate.swift; sourceTree = "<group>"; };
 		B75DF9A62A77C7120016FBCD /* SpaceInvadersForAston.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SpaceInvadersForAston.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B75DF9A92A77C7120016FBCD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B75DF9AB2A77C7120016FBCD /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -50,6 +56,12 @@
 		B75DF9CD2A791B6D0016FBCD /* background_soundtrack.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = background_soundtrack.mp3; sourceTree = "<group>"; };
 		B75DF9CF2A792CD10016FBCD /* openFire_sound.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = openFire_sound.mp3; sourceTree = "<group>"; };
 		B7A7107A2A7A68E300D6D3DC /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
+		B7B622DF2A950DB90036E44B /* RecordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordsViewController.swift; sourceTree = "<group>"; };
+		B7B622E12A950FDC0036E44B /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		B7B622E62A9610940036E44B /* RecordViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RecordViewCell.xib; sourceTree = "<group>"; };
+		B7B622E82A9626120036E44B /* RecordModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordModel.swift; sourceTree = "<group>"; };
+		B7B622EA2A9643220036E44B /* SpaceshipNames.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpaceshipNames.swift; sourceTree = "<group>"; };
+		B7B622EC2A9682840036E44B /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		C34588748DE169C3B50F093B /* Pods-SpaceInvadersForAston.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SpaceInvadersForAston.debug.xcconfig"; path = "Target Support Files/Pods-SpaceInvadersForAston/Pods-SpaceInvadersForAston.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,8 +139,11 @@
 			isa = PBXGroup;
 			children = (
 				B75DF9C42A780EFF0016FBCD /* GameplayConstants.swift */,
-				B722C1002A94A51C004EE9C7 /* ObjcCategories.swift */,
-				B722C1022A94B5B4004EE9C7 /* UIConstraintsConstants.swift */,
+				B722C1002A94A51C004EE9C7 /* ObjcKeys.swift */,
+				B722C1022A94B5B4004EE9C7 /* UIConstants.swift */,
+				B7B622E82A9626120036E44B /* RecordModel.swift */,
+				B7B622EA2A9643220036E44B /* SpaceshipNames.swift */,
+				B7B622EC2A9682840036E44B /* UserDefaultsKeys.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -149,7 +164,7 @@
 				B75DF9AB2A77C7120016FBCD /* GameScene.sks */,
 				B75DF9B82A77C7140016FBCD /* LaunchScreen.storyboard */,
 				B75DF9B32A77C7120016FBCD /* Main.storyboard */,
-				B722C1082A94CB52004EE9C7 /* GameOverView.xib */,
+				B7B622E62A9610940036E44B /* RecordViewCell.xib */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -161,6 +176,9 @@
 				B75DF9B12A77C7120016FBCD /* GameViewController.swift */,
 				B75DF9AF2A77C7120016FBCD /* GameScene.swift */,
 				B722C10A2A94CB61004EE9C7 /* GameOverView.swift */,
+				B722C10C2A94DF45004EE9C7 /* GameViewControllerDelegate.swift */,
+				B7B622DF2A950DB90036E44B /* RecordsViewController.swift */,
+				B7B622E12A950FDC0036E44B /* SettingsViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -234,7 +252,6 @@
 			files = (
 				B75DF9B52A77C7120016FBCD /* Main.storyboard in Resources */,
 				B75DF9AC2A77C7120016FBCD /* GameScene.sks in Resources */,
-				B722C1092A94CB52004EE9C7 /* GameOverView.xib in Resources */,
 				B75DF9CE2A791B6D0016FBCD /* background_soundtrack.mp3 in Resources */,
 				B75DF9B72A77C7140016FBCD /* Assets.xcassets in Resources */,
 				B75DF9CC2A7918910016FBCD /* explosion_sound.mp3 in Resources */,
@@ -242,6 +259,7 @@
 				B75DF9D02A792CD10016FBCD /* openFire_sound.mp3 in Resources */,
 				B75DF9BA2A77C7140016FBCD /* LaunchScreen.storyboard in Resources */,
 				B75DF9C12A77F9440016FBCD /* explosionParticle.sks in Resources */,
+				B7B622E72A9610940036E44B /* RecordViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -277,14 +295,20 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B722C1032A94B5B4004EE9C7 /* UIConstraintsConstants.swift in Sources */,
+				B7B622E92A9626120036E44B /* RecordModel.swift in Sources */,
+				B722C1032A94B5B4004EE9C7 /* UIConstants.swift in Sources */,
+				B7B622E02A950DB90036E44B /* RecordsViewController.swift in Sources */,
 				B75DF9B02A77C7120016FBCD /* GameScene.swift in Sources */,
 				B75DF9B22A77C7120016FBCD /* GameViewController.swift in Sources */,
 				B75DF9AA2A77C7120016FBCD /* AppDelegate.swift in Sources */,
-				B722C1012A94A51C004EE9C7 /* ObjcCategories.swift in Sources */,
+				B7B622EB2A9643220036E44B /* SpaceshipNames.swift in Sources */,
+				B722C1012A94A51C004EE9C7 /* ObjcKeys.swift in Sources */,
+				B7B622ED2A9682840036E44B /* UserDefaultsKeys.swift in Sources */,
 				B7A7107B2A7A68E300D6D3DC /* MainMenuViewController.swift in Sources */,
+				B722C10D2A94DF45004EE9C7 /* GameViewControllerDelegate.swift in Sources */,
 				B722C10B2A94CB61004EE9C7 /* GameOverView.swift in Sources */,
 				B75DF9C52A780EFF0016FBCD /* GameplayConstants.swift in Sources */,
+				B7B622E22A950FDC0036E44B /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
