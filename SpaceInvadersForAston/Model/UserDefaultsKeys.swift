@@ -14,4 +14,5 @@ enum UserDefaultsKeys {
     static let speedAttack = "speedAttack"
     static let gameSpeed = "gameSpeed"
     static let volumeSong = "volumeSong"
+    static let recordsArray = "recordsArray"
 }

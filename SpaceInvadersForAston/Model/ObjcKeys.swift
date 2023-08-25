@@ -11,5 +11,5 @@ enum ObjcKeys{
     static let enemyCategory: UInt32 = 1
     static let bulletCategory: UInt32 = 2
     static let spaceShipCategory: UInt32 = 3
-    static let recordsArray:String = "recordsArray"
+    
 }

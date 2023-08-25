@@ -29,9 +29,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     var heartsArray:[SKSpriteNode] = []
     var lifeScore:Int = 0
     
-    let player = SKSpriteNode()
-    
-    var audioPlayer = AVAudioPlayer()
+    var songAudioPlayer = AVAudioPlayer()
+    var openFireAudioPlayer = AVAudioPlayer()
+    var explosionAudioPlayer = AVAudioPlayer()
         
     weak var gameViewControlerDelegate: GameViewControllerDelegate?
        
@@ -180,7 +180,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     @objc func openFire(){
-        self.run(SKAction.playSoundFileNamed("openFire_sound", waitForCompletion: false))
+        
+        let url = URL(fileURLWithPath: Bundle.main.path(forResource: "openFire_sound.mp3", ofType: nil)!)
+        do {
+            openFireAudioPlayer = try AVAudioPlayer(contentsOf: url)
+            openFireAudioPlayer.prepareToPlay()
+            if let volumeSong = defaults.object(forKey: UserDefaultsKeys.volumeSong) as? Float {
+                openFireAudioPlayer.setVolume(volumeSong, fadeDuration: 0)
+            } else {
+                openFireAudioPlayer.setVolume(0.5, fadeDuration: 0)
+            }
+            openFireAudioPlayer.play()
+        } catch {
+            print("File download error")
+        }
+        
+        
         
         let bullet = SKSpriteNode(imageNamed: "bullet")
         
@@ -208,23 +223,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     
     func playBackgroundSong(){
         let url = URL(fileURLWithPath: Bundle.main.path(forResource: "background_soundtrack.mp3", ofType: nil)!)
-        if let volumeSong = defaults.object(forKey: UserDefaultsKeys.volumeSong) as? Float {
-            do{
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                audioPlayer.setVolume(volumeSong, fadeDuration: 0)
-                audioPlayer.play()
-            } catch {
-                print("File download error")
+        do {
+            songAudioPlayer = try AVAudioPlayer(contentsOf: url)
+            if let volumeSong = defaults.object(forKey: UserDefaultsKeys.volumeSong) as? Float {
+                songAudioPlayer.setVolume(volumeSong, fadeDuration: 0)
+                songAudioPlayer.play()
+            } else {
+                songAudioPlayer = try AVAudioPlayer(contentsOf: url)
+                songAudioPlayer.setVolume(0.5, fadeDuration: 0)
+                songAudioPlayer.play()
             }
-        } else {
-            do{
-                audioPlayer = try AVAudioPlayer(contentsOf: url)
-                audioPlayer.setVolume(0.5, fadeDuration: 0)
-                audioPlayer.play()
-            } catch {
-                print("File download error")
-            }
+        } catch {
+            print("File download error")
         }
+        
     }
     
     func randomisePos() -> CGFloat{
@@ -253,8 +265,43 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
         }
     }
     
-    func collisionEnemyAndBullet(bodyANode: SKSpriteNode, bodyBNode: SKSpriteNode){
+    func explosion(firstBody: SKSpriteNode, secondBody: SKSpriteNode, isSpaceshipCollision: Bool){
         
+        let url = URL(fileURLWithPath: Bundle.main.path(forResource: "explosion_sound.mp3", ofType: nil)!)
+        do {
+            explosionAudioPlayer = try AVAudioPlayer(contentsOf: url)
+            explosionAudioPlayer.prepareToPlay()
+            if let volumeSong = defaults.object(forKey: UserDefaultsKeys.volumeSong) as? Float {
+                explosionAudioPlayer.setVolume(volumeSong, fadeDuration: 0)
+            } else {
+                explosionAudioPlayer.setVolume(0.5, fadeDuration: 0)
+            }
+            explosionAudioPlayer.play()
+        } catch {
+            print("File download error")
+        }
+        
+        let explosion = SKEmitterNode(fileNamed: "explosionParticle")
+        explosion?.position = firstBody.position
+        explosion?.setScale(0.8)
+        self.addChild(explosion!)
+        self.run(SKAction.wait(forDuration: 2)){
+            explosion?.removeFromParent()
+        }
+        
+        if isSpaceshipCollision{
+            let secondExplosion = SKEmitterNode(fileNamed: "explosionParticle")
+            secondExplosion?.position = secondBody.position
+            secondExplosion?.setScale(0.8)
+            self.addChild(secondExplosion!)
+            self.run(SKAction.wait(forDuration: 2)){
+                secondExplosion?.removeFromParent()
+            }
+        }
+    }
+    
+    
+    func collisionEnemyAndBullet(bodyANode: SKSpriteNode, bodyBNode: SKSpriteNode){
         var enemyBody: SKSpriteNode
         var bulletBody: SKSpriteNode
         
@@ -265,26 +312,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             enemyBody = bodyBNode
             bulletBody = bodyANode
         }
-        
-        let explosion = SKEmitterNode(fileNamed: "explosionParticle")
-        explosion?.position = enemyBody.position
-        explosion?.setScale(0.8)
-        self.addChild(explosion!)
-        self.run(SKAction.playSoundFileNamed("explosion_sound", waitForCompletion: false))
-        
+        explosion(firstBody: enemyBody, secondBody: bulletBody, isSpaceshipCollision: false)
         enemyBody.removeFromParent()
         bulletBody.removeFromParent()
-        
-        self.run(SKAction.wait(forDuration: 2)){
-            explosion?.removeFromParent()
-        }
         score += 5
     }
     
     
     func collisionEnemyAndSpaceship(bodyANode: SKSpriteNode, bodyBNode: SKSpriteNode){
-        let explosion = SKEmitterNode(fileNamed: "explosionParticle")
-        let secondExplosion = SKEmitterNode(fileNamed: "explosionParticle")
         var spaceshipBody: SKSpriteNode
         var enemyBody: SKSpriteNode
         
@@ -296,19 +331,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
             enemyBody = bodyANode
         }
         
-        explosion?.position = spaceshipBody.position
-        explosion?.setScale(0.8)
-        self.addChild(explosion!)
-        secondExplosion?.position = enemyBody.position
-        secondExplosion?.setScale(0.8)
-        self.addChild(secondExplosion!)
-        
-        self.run(SKAction.playSoundFileNamed("explosion_sound", waitForCompletion: false))
-        
-        self.run(SKAction.wait(forDuration: 2)){
-            explosion?.removeFromParent()
-            secondExplosion?.removeFromParent()
-        }
+        explosion(firstBody: spaceshipBody, secondBody: enemyBody, isSpaceshipCollision: true)
         
         if lifeScore <= 0 {
             spaceshipBody.removeFromParent()
@@ -323,19 +346,37 @@ class GameScene: SKScene, SKPhysicsContactDelegate{
     }
     
     func saveNewRecord(){
-        let defaults = UserDefaults.standard
-        if var recordsArray = defaults.array(forKey: ObjcKeys.recordsArray) as? Array<Int>{
-            recordsArray.append(score)
-            recordsArray.sort(by: > )
-            recordsArray.removeLast()
-            defaults.set(recordsArray, forKey: ObjcKeys.recordsArray)
+        let encoder = JSONEncoder()
+        let decoder = JSONDecoder()
+        
+        
+        let recordForSave = RecordModel(name: defaults.string(forKey: UserDefaultsKeys.playerName) ?? "Name", score: self.score, spaceShip: defaults.string(forKey: UserDefaultsKeys.spaceShipName) ?? SpaceshipNames.classic.rawValue)
+        
+        if var recordsArrayData = defaults.array(forKey: UserDefaultsKeys.recordsArray) as? Array<Data>{
+            var recordsArrayRecordModel = Array<RecordModel>()
+            recordsArrayData.forEach({
+                try? recordsArrayRecordModel.append(decoder.decode(RecordModel.self, from: $0))
+            })
+            recordsArrayRecordModel.append(recordForSave)
+            recordsArrayRecordModel.sort(by: {
+                $0.score > $1.score
+            })
+            recordsArrayRecordModel.removeLast()
+            
+            recordsArrayData.removeAll()
+            recordsArrayRecordModel.forEach({
+                try? recordsArrayData.append(encoder.encode($0))
+            })
+            
+            defaults.set(recordsArrayData, forKey: UserDefaultsKeys.recordsArray)
         } else {
-            defaults.set(Array<Int>(repeating: 0, count: 10), forKey: ObjcKeys.recordsArray)
+            let emptyRecordsArray = Array<Data>(repeating: try! encoder.encode(RecordModel(name: "", score: 0, spaceShip: "")), count: 10)
+            defaults.set(emptyRecordsArray, forKey: UserDefaultsKeys.recordsArray)
         }
     }
     
     func endGame(){
-        audioPlayer.stop()
+        songAudioPlayer.stop()
         saveNewRecord()
         speedAttackTimer.invalidate()
         gameViewControlerDelegate?.openGameOverView()

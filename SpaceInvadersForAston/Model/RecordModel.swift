@@ -9,12 +9,12 @@ import Foundation
 
 struct RecordModel:Codable{
     var name: String
-    var scrore:Int
+    var score:Int
     var spaceShip: String
     
-    init(name: String, scrore: Int, spaceShip: String) {
+    init(name: String, score: Int, spaceShip: String) {
         self.name = name
-        self.scrore = scrore
+        self.score = score
         self.spaceShip = spaceShip
     }
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class RecordsViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class RecordsViewController: UIViewController {
     
     let defaults = UserDefaults.standard
     let titleLable = UILabel()
@@ -67,31 +67,90 @@ class RecordsViewController: UIViewController, UITableViewDelegate, UITableViewD
     func backButtonPressed(){
         self.dismiss(animated: true)
     }
-    
+}
+
+extension RecordsViewController: UITableViewDelegate, UITableViewDataSource{
     //MARK: - UITableViewDataSource
 
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if let recordsArray = defaults.array(forKey: ObjcKeys.recordsArray){
+        if let recordsArray = defaults.array(forKey: UserDefaultsKeys.recordsArray){
             return recordsArray.count
         } else { return 0 }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = self.tableView.dequeueReusableCell(withIdentifier: cellIdentifire , for: indexPath)
-        let recordsArray = defaults.array(forKey: ObjcKeys.recordsArray)
-        let record = recordsArray?[indexPath.row] as! Int
-        cell.textLabel?.text = String(describing: record)
+        var content = cell.defaultContentConfiguration()
+        if let recordsArray = defaults.array(forKey: UserDefaultsKeys.recordsArray) as? Array<Data> {
+            let decoder = JSONDecoder()
+            if let record = try? decoder.decode(RecordModel.self, from: recordsArray[indexPath.row]){
+                
+                let image = UIImage(named: record.spaceShip)
+                let renderer = UIGraphicsImageRenderer(size: CGSize(width: 20, height: 25))
+                let scaledImage = renderer.image { _ in
+                    image?.draw(in: CGRect(origin: .zero, size: CGSize(width: 20, height: 25)))
+                }
+                
+                content.image = scaledImage
+                content.text = record.name
+                content.secondaryText = String(record.score)
+            } else {
+                content.image = UIImage()
+                content.text = ""
+                content.secondaryText = ""
+            }
+        }
+        cell.contentConfiguration = content
         return cell
     }
     
     //MARK: - UITableViewDelegate
-    
 }
 
 class RecordViewCell:UITableViewCell{
-    var spaceShipImage = UIImageView()
+    var spaceShipImageView = UIImageView()
     var nameUserLabel = UILabel()
     var scoreRecordlabel = UILabel()
+    
+    var spceShipImageName: String!
+    var userName: String!
+    var score: Int!
+    
+    
+    func setupSells(){
+        
+        spaceShipImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        nameUserLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        scoreRecordlabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            spaceShipImageView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5),
+            spaceShipImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 5),
+            spaceShipImageView.widthAnchor.constraint(equalToConstant: 50),
+            spaceShipImageView.heightAnchor.constraint(equalToConstant: 50),
+            
+            nameUserLabel.leftAnchor.constraint(equalTo: spaceShipImageView.rightAnchor, constant: 5),
+            nameUserLabel.topAnchor.constraint(equalTo: spaceShipImageView.topAnchor),
+            nameUserLabel.heightAnchor.constraint(equalTo: spaceShipImageView.heightAnchor),
+            nameUserLabel.widthAnchor.constraint(equalToConstant: 300),
+            
+            scoreRecordlabel.topAnchor.constraint(equalTo: spaceShipImageView.topAnchor),
+            scoreRecordlabel.leftAnchor.constraint(equalTo: nameUserLabel.rightAnchor, constant: 5),
+            scoreRecordlabel.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -5)
+            
+        ])
+        
+        self.addSubview(spaceShipImageView)
+        self.addSubview(nameUserLabel)
+        self.addSubview(scoreRecordlabel)
+        
+    }
     
     
 }

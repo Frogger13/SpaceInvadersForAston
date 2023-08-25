@@ -152,25 +152,25 @@ class SettingsViewController: UIViewController, UITextFieldDelegate {
                 do {
                     self.lifeScore = 5
                     self.timeAppearenceinterval = 1.5
-                    self.gameSpeed = 20
+                    self.gameSpeed = 16
                 }
             case 1:
                 do {
                     self.lifeScore = 3
                     self.timeAppearenceinterval = 1.5
-                    self.gameSpeed = 15
+                    self.gameSpeed = 8
                 }
             case 2:
                 do {
                     self.lifeScore = 1
                     self.timeAppearenceinterval = 1
-                    self.gameSpeed = 10
+                    self.gameSpeed = 4
                 }
             case 3:
                 do {
                     self.lifeScore = 0
                     self.timeAppearenceinterval = 1
-                    self.gameSpeed = 5
+                    self.gameSpeed = 2
                 }
             default:
                 do{
